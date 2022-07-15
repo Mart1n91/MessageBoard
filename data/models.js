@@ -18,8 +18,8 @@ let threadSchema = new mongoose.Schema({
 })
 
 // Stringen er modelnavnet og bliver collection navn i mongoDB
-let reply = mongoose.model('reply', replySchema);
-let thread = mongoose.model('thread', threadSchema);
+let reply = mongoose.model('Reply', replySchema);
+let thread = mongoose.model('Thread', threadSchema);
 
 module.exports ={reply, thread}
 

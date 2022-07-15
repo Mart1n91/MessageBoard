@@ -1,23 +1,17 @@
 'use strict';
 
-require("dotenv").config();
-
-
-// 
 var express     = require('express');
 var bodyParser  = require('body-parser');
+var expect      = require('chai').expect;
 var cors        = require('cors');
-let helmet      = require('helmet')
-var app         = express();
-
 
 var apiRoutes         = require('./routes/api.js');
 var fccTestingRoutes  = require('./routes/fcctesting.js');
 var runner            = require('./test-runner');
 
+let helmet = require('helmet')
 
-
-
+var app = express();
 
 app.use('/public', express.static(process.cwd() + '/public'));
 
@@ -25,24 +19,15 @@ app.use(cors({origin: '*'})); //For FCC testing purposes only
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-
-//#region :Security settings
-// Forhindre clickjacking
 app.use(helmet.frameguard({
 	action: 'sameorigin'
 }))
-
-// Forhindre at brugeren henter ip adresser via DNS på links
 app.use(helmet.dnsPrefetchControl({
 	allow: false
 }))
-
-// Fjerner refer header hvis der anvendes et link ud af min side
 app.use(helmet.referrerPolicy({
 	policy: 'same-origin'
 }))
-//#endregion
-
 
 //Sample front-end
 app.route('/b/:board/')
@@ -66,6 +51,7 @@ fccTestingRoutes(app);
 //Routing for API 
 apiRoutes(app);
 
+//Sample Front-end
 
     
 //404 Not Found Middleware

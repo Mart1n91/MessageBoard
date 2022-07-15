@@ -8,12 +8,13 @@ let Thread = require('../data/models').thread;
 
 module.exports = function (app) {
 
-	// 
+	// Post af thread information ----------------------------
 	app.post('/api/threads/:board', (request, response) => {
 		let newThread = new Thread(request.body)
 		if(!newThread.board || newThread.board === ''){
 			newThread.board = request.params.board
 		}
+	
 		newThread.createdon_ = new Date().toUTCString()
 		newThread.bumpedon_ = new Date().toUTCString()
 		newThread.reported = false
@@ -25,9 +26,7 @@ module.exports = function (app) {
 		})
 	})
 
-
-
-
+	// Post af replies for et angivet thread ------------------------------------------------
 	app.post('/api/replies/:board', (request, response) => {
 		let newReply = new Reply(request.body)
 		newReply.createdon_ = new Date().toUTCString()
@@ -44,6 +43,7 @@ module.exports = function (app) {
 		)
 	})
 
+	// get metode som giver de nyeste threads for et givet board -------------------------
 	app.get('/api/threads/:board', (request, response) => {
 
 		Thread.find({board: request.params.board})
@@ -81,6 +81,7 @@ module.exports = function (app) {
 
 	})
 
+	// get method der giver alle replies til in thread
 	app.get('/api/replies/:board', (request, response) => {
 
 		Thread.findById(
@@ -111,6 +112,8 @@ module.exports = function (app) {
 
 	})
 
+
+	// Delete method til at slette en tråd
 	app.delete('/api/threads/:board', (request, response) => {
 
 		Thread.findById(
@@ -142,6 +145,8 @@ module.exports = function (app) {
 
 	})
 
+
+	// method til at slette et reply
 	app.delete('/api/replies/:board', (request, response) => {
 
 		Thread.findById(
@@ -173,6 +178,7 @@ module.exports = function (app) {
 		)
 	})
 
+	// route til at reporter en thread
 	app.put('/api/threads/:board', (request, response) => {
 
 		Thread.findByIdAndUpdate(
@@ -187,6 +193,7 @@ module.exports = function (app) {
 		)
 	})
 
+	// route til at reportere et reply
 	app.put('/api/replies/:board', (request, response) => {
 		Thread.findById(
 			request.body.thread_id,
@@ -210,7 +217,4 @@ module.exports = function (app) {
 			}
 		)
 	})
-  
-  //app.route('/api/threads/:board');
-  //app.route('/api/replies/:board');
 };
